@@ -6,6 +6,15 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "@frontend/*": [
+                "packages/portal/frontend/src/app/*"
+            ],
+            "@common/*": [
+                "packages/common/*"
+            ]
+        },
         "lib": [
             "es7",
             "es2017.object",
@@ -18,5 +27,9 @@
     },
     "exclude": [
         "node_modules"
+    ],
+    "include": [
+        "../plugin/src/backend/**/*.ts",
+        "packages"
     ]
 }
