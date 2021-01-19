@@ -11,27 +11,32 @@ export enum LogLevel {
 
 let LOG_LEVEL: LogLevel;
 
-switch ((process.env["LOG_LEVEL"] || "").toUpperCase()) {
-    case "TRACE":
-        LOG_LEVEL = LogLevel.TRACE;
-        break;
-    case "INFO":
-        LOG_LEVEL = LogLevel.INFO;
-        break;
-    case "WARN":
-        LOG_LEVEL = LogLevel.WARN;
-        break;
-    case "ERROR":
-        LOG_LEVEL = LogLevel.ERROR;
-        break;
-    case "TEST":
-        LOG_LEVEL = LogLevel.TEST;
-        break;
-    case "NONE":
-        LOG_LEVEL = LogLevel.NONE;
-        break;
-    default:
-        LOG_LEVEL = LogLevel.TRACE;
+try {
+    switch ((process.env["LOG_LEVEL"] || "").toUpperCase()) {
+        case "TRACE":
+            LOG_LEVEL = LogLevel.TRACE;
+            break;
+        case "INFO":
+            LOG_LEVEL = LogLevel.INFO;
+            break;
+        case "WARN":
+            LOG_LEVEL = LogLevel.WARN;
+            break;
+        case "ERROR":
+            LOG_LEVEL = LogLevel.ERROR;
+            break;
+        case "TEST":
+            LOG_LEVEL = LogLevel.TEST;
+            break;
+        case "NONE":
+            LOG_LEVEL = LogLevel.NONE;
+            break;
+        default:
+            LOG_LEVEL = LogLevel.TRACE;
+    }
+} catch (err) {
+    console.log("<W> Problem getting log level; set to TRACE");
+    LOG_LEVEL = LogLevel.TRACE;
 }
 
 /**
