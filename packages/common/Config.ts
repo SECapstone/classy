@@ -1,9 +1,17 @@
 import * as dotenv from "dotenv";
 import Log, {LogLevel} from "./Log";
-const result = dotenv.config({path: __dirname + '/../../.env'});
 
-if (result.error) {
-    Log.warn("Failed to parse .env", result.error);
+let result = null;
+
+try {
+    result = dotenv.config({path: __dirname + "/../../.env"});
+} catch (err) {
+    // this is a pretty serious warning, except when running in docker
+    Log.warn("Config::<clinit> - Failed to read .env: " + err.message);
+}
+
+if (typeof result.error !== "undefined") {
+    Log.warn("Config::<clinit> - Failed to parse .env", result.error);
 }
 
 /**
@@ -97,21 +105,21 @@ export default class Config {
         // should not be called by clients but typescript does not allow private constructors
         try {
             this.config = {
-                name:     process.env.NAME,
-                org:      process.env.ORG,
-                testorg:  process.env.ORGTEST,
+                name: process.env.NAME,
+                org: process.env.ORG,
+                testorg: process.env.ORGTEST,
                 testname: process.env.NAMETEST,
                 plugin_fullpath: process.env.PLUGIN_FULLPATH,
 
-                classlist_uri:      process.env.CLASSLIST_URI,
+                classlist_uri: process.env.CLASSLIST_URI,
                 classlist_username: process.env.CLASSLIST_USERNAME,
                 classlist_password: process.env.CLASSLIST_PASSWORD,
 
                 minimum_student_delay: process.env.MINIMUM_STUDENT_DELAY,
                 publichostname: process.env.PUBLICHOSTNAME,
 
-                hostDir:  process.env.HOST_DIR,
-                postback:   Boolean(process.env.AUTOTEST_POSTBACK),
+                hostDir: process.env.HOST_DIR,
+                postback: Boolean(process.env.AUTOTEST_POSTBACK),
                 persistDir: process.env.PERSIST_DIR,
                 dockerUid: process.env.UID,
                 hostsAllow: process.env.HOSTS_ALLOW,
@@ -119,46 +127,46 @@ export default class Config {
                 timeout: Number(process.env.GRADER_TIMEOUT),
                 botName: process.env.GH_BOT_USERNAME,
 
-                sslCertPath:     process.env.SSL_CERT_PATH,
-                sslKeyPath:      process.env.SSL_KEY_PATH,
+                sslCertPath: process.env.SSL_CERT_PATH,
+                sslKeyPath: process.env.SSL_KEY_PATH,
 
                 mongoUrl: process.env.DB_URL,
 
-                backendPort:  process.env.BACKEND_PORT,
-                backendUrl:   process.env.BACKEND_URL,
+                backendPort: process.env.BACKEND_PORT,
+                backendUrl: process.env.BACKEND_URL,
 
-                githubHost:         process.env.GH_HOST,
-                githubAPI:          process.env.GH_API,
-                githubBotName:      process.env.GH_BOT_USERNAME,
-                githubBotToken:     process.env.GH_BOT_TOKEN,
-                githubClientId:     process.env.GH_CLIENT_ID,
+                githubHost: process.env.GH_HOST,
+                githubAPI: process.env.GH_API,
+                githubBotName: process.env.GH_BOT_USERNAME,
+                githubBotToken: process.env.GH_BOT_TOKEN,
+                githubClientId: process.env.GH_CLIENT_ID,
                 githubClientSecret: process.env.GH_CLIENT_SECRET,
-                githubDockerToken:  process.env.GH_DOCKER_TOKEN,
+                githubDockerToken: process.env.GH_DOCKER_TOKEN,
 
-                githubAdmin:        process.env.GH_ADMIN,
-                githubAdminStaff:   process.env.GH_ADMIN_STAFF,
-                githubStaff:        process.env.GH_STAFF,
-                githubBot01:        process.env.GH_BOT_01,
-                githubBot02:        process.env.GH_BOT_02,
-                githubTestUsers:    process.env.GH_TEST_USERS,
+                githubAdmin: process.env.GH_ADMIN,
+                githubAdminStaff: process.env.GH_ADMIN_STAFF,
+                githubStaff: process.env.GH_STAFF,
+                githubBot01: process.env.GH_BOT_01,
+                githubBot02: process.env.GH_BOT_02,
+                githubTestUsers: process.env.GH_TEST_USERS,
 
-                autotestUrl:    process.env.AUTOTEST_URL,
-                autotestPort:   process.env.AUTOTEST_PORT,
+                autotestUrl: process.env.AUTOTEST_URL,
+                autotestPort: process.env.AUTOTEST_PORT,
                 autotestSecret: process.env.AUTOTEST_SECRET,
 
-                patchId:         process.env.PATCH_ID,
-                patchToolUrl:    process.env.PATCH_TOOL_URL,
+                patchId: process.env.PATCH_ID,
+                patchToolUrl: process.env.PATCH_TOOL_URL,
                 patchSourceRepo: process.env.PATCH_SOURCE_REPO,
 
-                adminTeamName:  process.env.ADMIN_TEAM_NAME,
-                staffTeamName:  process.env.STAFF_TEAM_NAME,
+                adminTeamName: process.env.ADMIN_TEAM_NAME,
+                staffTeamName: process.env.STAFF_TEAM_NAME,
             };
 
             // this is not a great place for this
             // but at least it should happen near the start of any execution
             Log.info("Config - Log::<init>");
             const ci = process.env.CI;
-            if (typeof ci !== 'undefined' && Boolean(ci) === true) {
+            if (typeof ci !== "undefined" && Boolean(ci) === true) {
                 Log.info("Config - Log::<init> - CI detected; changing to INFO");
                 Log.Level = LogLevel.INFO; // change to INFO from TRACE if on CI
             } else {
@@ -204,10 +212,10 @@ export default class Config {
         const config = Config.getInstance();
         sensitiveKeys.forEach((sk) => {
             // HACK: replace() - edge case regarding token prefix in the config.
-            const value: string = config.getProp(sk).replace('token ', '');
+            const value: string = config.getProp(sk).replace("token ", "");
 
             const hint = value.substring(0, 4);
-            input = input.replace(new RegExp(value, 'g'), hint + '-xxxxxx');
+            input = input.replace(new RegExp(value, "g"), hint + "-xxxxxx");
         });
         return input;
     }
