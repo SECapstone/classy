@@ -6,7 +6,9 @@ require('dotenv').config(
 );
 
 // copy plugin files so they are available to frontend
-const CopyPlugin = require('copy-webpack-plugin');
+// const CopyPlugin = require('copy-webpack-plugin');
+
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 // handle @frontend and @common type import aliases from plugin
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -20,29 +22,52 @@ module.exports = {
     mode: 'development',
 
     plugins: [
-        new CopyPlugin({
-            patterns: [
-                // copy plugin frontend files frontend into a place where webpack can include them
-                // custom backend files can be accessed directly and do not need to be copied
-                {
-                    from: process.env.PLUGIN_FULLPATH + '/src/frontend/CustomStudentView.ts',
-                    to: '../../src/app/custom/CustomStudentView.ts',
-                    noErrorOnMissing: false
-                },
-                {
-                    from: process.env.PLUGIN_FULLPATH + '/src/frontend/CustomAdminView.ts',
-                    to: '../../src/app/custom/CustomAdminView.ts',
-                    noErrorOnMissing: false
-                },
-                {
-                    from: process.env.PLUGIN_FULLPATH + '/html',
-                    // to: '../html/' + process.env.NAME, // puts it in ./html/html/{name}
-                    to: '../' + process.env.NAME,
-                    toType: 'dir',
-                    noErrorOnMissing: false
+        new FileManagerPlugin({
+            events: {
+                onStart: {
+                    copy: [
+                        {
+                            source: process.env.PLUGIN_FULLPATH + '/src/frontend/CustomStudentView.ts',
+                            destination: './src/app/custom/CustomStudentView.ts'
+                        },
+                        {
+                            source: process.env.PLUGIN_FULLPATH + '/src/frontend/CustomAdminView.ts',
+                            destination: './src/app/custom/CustomAdminView.ts'
+                        },
+                        {
+                            source: process.env.PLUGIN_FULLPATH + '/html',
+                            destination: './html/' + process.env.NAME
+                        },
+                    ]
                 }
-            ],
+            }
         }),
+        // new CopyPlugin({
+        //     patterns: [
+        //         // copy plugin frontend files frontend into a place where webpack can include them
+        //         // custom backend files can be accessed directly and do not need to be copied
+        //         {
+        //             from: process.env.PLUGIN_FULLPATH + '/src/frontend/CustomStudentView.ts',
+        //             to: '../../src/app/custom/CustomStudentView.ts',
+        //             noErrorOnMissing: false,
+        //             force: true
+        //         },
+        //         {
+        //             from: process.env.PLUGIN_FULLPATH + '/src/frontend/CustomAdminView.ts',
+        //             to: '../../src/app/custom/CustomAdminView.ts',
+        //             noErrorOnMissing: false,
+        //             force: true
+        //         },
+        //         {
+        //             from: process.env.PLUGIN_FULLPATH + '/html',
+        //             // to: '../html/' + process.env.NAME, // puts it in ./html/html/{name}
+        //             to: '../' + process.env.NAME,
+        //             toType: 'dir',
+        //             noErrorOnMissing: false,
+        //             force: true
+        //         }
+        //     ],
+        // }),
     ],
 
     entry: {
