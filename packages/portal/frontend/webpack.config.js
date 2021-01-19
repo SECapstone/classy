@@ -72,16 +72,20 @@ module.exports = {
 
     module: {
         rules: [
-            // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader' or awesome-typescript-loader'.
-            {test: /\.tsx?$/, loader: "ts-loader"},
-
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+            // All '.ts' files will be handled by 'ts-loader'
             {
-                enforce: "pre",
-                test: /\.js$/,
-                loader: "source-map-loader",
-                exclude: []
-            }
+                test: /\.ts?$/,
+                loader: "ts-loader"
+            },
+
+            // These cause problems with copyplugin and might be handled already by ts-loader's sourcemap support
+            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+            // {
+            //     enforce: "pre",
+            //     test: /\.js$/,
+            //     loader: "source-map-loader",
+            //     exclude: []
+            // }
         ]
     }
 };
