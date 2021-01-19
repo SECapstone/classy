@@ -43,7 +43,7 @@ export class AuthRoutes implements IREST {
      *
      * Really.
      *
-     * Code taken from restify #284
+     * Code taken from restify #284 (https://github.com/restify/node-restify/issues/284)
      *
      * Run often by browsers, but never with the unit test suite.
      *
@@ -62,6 +62,10 @@ export class AuthRoutes implements IREST {
 
         if (res.methods.indexOf('GET') === -1) {
             res.methods.push('GET');
+        }
+
+        if (res.methods.indexOf('POST') === -1) {
+            res.methods.push('POST');
         }
 
         res.header('Access-Control-Allow-Credentials', true);
