@@ -72,6 +72,7 @@ export class AuthRoutes implements IREST {
         res.header('Access-Control-Allow-Headers', allowHeaders.join(', '));
         res.header('Access-Control-Allow-Methods', res.methods.join(', '));
         res.header('Access-Control-Allow-Origin', req.headers.origin);
+        res.header('Allow', req.method.toUpperCase());
 
         Log.trace("AuthRoutes::handlePreflight(..) - sending 204; headers: " + JSON.stringify(res.getHeaders()));
         return res.send(204);
