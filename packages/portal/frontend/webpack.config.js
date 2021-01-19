@@ -78,7 +78,7 @@ module.exports = {
                 loader: "ts-loader"
             },
 
-            // These cause problems with copyplugin and might be handled already by ts-loader's sourcemap support
+            // This causes problems with copy-plugin; sourcmaps are already gennerated by ts-loader anyways
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             // {
             //     enforce: "pre",
